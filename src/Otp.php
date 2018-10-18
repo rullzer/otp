@@ -128,7 +128,7 @@ class Otp implements OtpInterface
     /* (non-PHPdoc)
      * @see Otp.OtpInterface::checkTotp()
     */
-    public function checkTotp($secret, $key, $timedrift = 1, $minTimeCounter = -1)
+    public function checkTotp($secret, $key, $timedrift = 1, $minTimeCounter = -1, &$newTimeCounter = null)
     {
         if (!is_numeric($timedrift) || $timedrift < 0) {
             throw new \InvalidArgumentException('Invalid timedrift supplied');
@@ -148,6 +148,7 @@ class Otp implements OtpInterface
     
         // We first try the current, as it is the most likely to work
         if ($timecounter > $minTimeCounter && hash_equals($this->totp($secret, $timecounter), $key)) {
+            $newTimeCounter = $timecounter;
             return true;
         } elseif ($timedrift == 0) {
             // When timedrift is 0, this is the end of the checks
@@ -167,6 +168,7 @@ class Otp implements OtpInterface
             }
                 
             if (hash_equals($this->totp($secret, $t), $key)) {
+                $newTimeCounter = $timecounter;
                 return true;
             }
         }
