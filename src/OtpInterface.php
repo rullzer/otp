@@ -67,11 +67,12 @@ interface OtpInterface
     /**
      * Checks Totp agains a key
      *
-     * @param string  $secret    Base32 Secret String
-     * @param integer $key       User supplied key
-     * @param integer $timedrift How large a drift to use beyond exact match
+     * @param string  $secret         Base32 Secret String
+     * @param integer $key            User supplied key
+     * @param integer $timedrift      How large a drift to use beyond exact match
+     * @param integer $minTimeCounter The smallest timecode that is accepted
      *
      * @return boolean True if key is correct within time drift
      */
-    function checkTotp($secret, $key, $timedrift = 1);
+    function checkTotp($secret, $key, $timedrift = 1, $minTimeCounter = -1);
 }
